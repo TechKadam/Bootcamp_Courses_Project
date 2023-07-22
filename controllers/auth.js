@@ -10,12 +10,15 @@ exports.register = async (req, res, next) => {
 
     // Create User
     const user = await User.create({
+      // this is a statics because it is called on model itself
       name,
       email,
       password,
       role,
     });
-    res.status(200).json({ success: true });
+    // Create token
+    const token = user.getSignedJwtToken();
+    res.status(200).json({ success: true, token });
   } catch (err) {
     next(err);
   }
