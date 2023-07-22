@@ -8,7 +8,7 @@ const {
   getBootcampsInRadius,
   bootcampPhotoUpload,
 } = require("../controllers/bootcamp");
-const Bootcamp = require("../models/bootcamp");
+const Bootcamp = require("../models/Bootcamp");
 const advancedResults = require("../middleware/advancedResults");
 // Include other resource routers
 const courseRouter = require("./courses");

@@ -1,5 +1,5 @@
 const ErrorResponse = require("../utils/errorResponse");
-const Bootcamp = require("../models/bootcamp");
+const Bootcamp = require("../models/Bootcamp");
 const geocoder = require("../utils/geocoder");
 const path = require("path");
 // @desc     Get all bootcamps
