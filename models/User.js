@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -33,4 +34,10 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
+// Encrypt password using bcrypt
+UserSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  //   The this keyword can be used to access the properties and methods of the current document being saved to the database.
+});
 module.exports = mongoose.model("User", UserSchema);
