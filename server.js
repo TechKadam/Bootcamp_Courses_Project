@@ -3,8 +3,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const colors = require("colors");
-const cookieparser = require("cookie-parser");
 const fileupload = require("express-fileupload");
+const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/error");
 // load env vars
 dotenv.config({ path: "./config/config.env" });
@@ -19,12 +19,12 @@ const app = express();
 
 // Body parser
 app.use(express.json());
+// cookie parser
+app.use(cookieParser());
 // File uploading
 app.use(fileupload());
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
-// Cookie parser
-app.use(cookieparser());
 // Mount Routers
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
