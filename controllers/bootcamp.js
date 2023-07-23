@@ -61,14 +61,24 @@ createBootcamp = async (req, res, next) => {
 // @access   Private
 updateBootcamp = async (req, res, next) => {
   try {
-    const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    let bootcamp = await Bootcamp.findById(req.params.id);
     if (!bootcamp)
       return next(
         new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
       );
+    // Make sure user is bootcamp owner
+    if (bootcamp.user.toString() != req.user.id && req.user.role != "admin") {
+      return next(
+        new ErrorResponse(
+          `User ${req.user.id} is not authorized to update this bootcamp`,
+          401
+        )
+      );
+    }
+    bootcamp = await Bootcamp.findOneAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
     res.status(200).json({ success: true, data: bootcamp });
   } catch (err) {
     next(err);
@@ -85,6 +95,15 @@ deleteBootcamp = async (req, res, next) => {
       return next(
         new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
       );
+    // Make sure user is bootcamp owner
+    if (bootcamp.user.toString() != req.user.id && req.user.role != "admin") {
+      return next(
+        new ErrorResponse(
+          `User ${req.user.id} is not authorized to update this bootcamp`,
+          401
+        )
+      );
+    }
     bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
     res.status(200).json({ success: true, data: bootcamp });
   } catch (err) {
@@ -132,6 +151,15 @@ bootcampPhotoUpload = async (req, res, next) => {
       return next(
         new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
       );
+    // Make sure user is bootcamp owner
+    if (bootcamp.user.toString() != req.user.id && req.user.role != "admin") {
+      return next(
+        new ErrorResponse(
+          `User ${req.user.id} is not authorized to update this bootcamp`,
+          401
+        )
+      );
+    }
     if (!req.files) {
       return next(new ErrorResponse(`Please upload a file`, 400));
     }
